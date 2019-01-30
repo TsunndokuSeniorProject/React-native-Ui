@@ -2,10 +2,13 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
-import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import TabBarIcon from '../components/TabBarIcon'
+import HomeScreen from '../screens/HomeScreen'
+import LinksScreen from '../screens/LinksScreen'
+import SettingsScreen from '../screens/SettingsScreen'
+import InsertBookScreen from '../screens/InsertBooksScreen'
+import ScanBarcodeScreen from '../screens/ScanBarcodeScreen'
+import ResultInsertScreen from '../screens/ResultInsertScreen'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -39,6 +42,22 @@ LinksStack.navigationOptions = {
   ),
 };
 
+const InsertBookStack = createStackNavigator({
+  Insert: InsertBookScreen,
+  ScanBarcode : ScanBarcodeScreen,
+  Result : ResultInsertScreen,
+});
+
+InsertBookStack.navigationOptions = {
+  tabBarLabel: 'Insert',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-add-circle-outline' : 'md-add-circle-outline'}
+    />
+  ),
+};
+
 const SettingsStack = createStackNavigator({
   Settings: SettingsScreen,
 });
@@ -55,6 +74,7 @@ SettingsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
+  InsertBookStack,
   LinksStack,
   SettingsStack,
 });

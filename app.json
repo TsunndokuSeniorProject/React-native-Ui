@@ -22,8 +22,6 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    }
+    "scheme": "exp05126ebdac21457390369e2805a0fef2",
   }
 }
