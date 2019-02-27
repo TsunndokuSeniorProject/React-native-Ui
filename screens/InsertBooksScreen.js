@@ -8,6 +8,8 @@ import {
   NavigationBar,
   Title,
   Screen,
+  Heading,
+  Divider,
   View,
   Text,
 } from '@shoutem/ui';
@@ -23,31 +25,62 @@ export default class LinksScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <Screen>
-        <NavigationBar
+      <Screen styleName="paper">
+        {/* <NavigationBar
           styleName="inline"
           centerComponent={<Title>Insert books</Title>}
-        />
+        /> */}
+        <HeadingContainer>
+          <HeadingText>
+            Insert book
+          </HeadingText>
+        </HeadingContainer>
         <RowInsertBtn>
-          <InsertBtn name="Test" color="red" navigate={() => navigate('ScanBarcode')}/>
-          <InsertBtn name="Test" color="#845EC2" navigate={() => navigate("ScanBarcode")}/>
+          <InsertBtn name="Scan barcode" color="#eb5c48" navigate={() => navigate('ScanBarcode')}/>
+          {/* <InsertBtn name="Search name" color="#8bc6a8" navigate={() => navigate("ScanBarcode")}/> */}
         </RowInsertBtn>
+        <SubtitleContainer>
+          <SubtitleText>
+            History
+          </SubtitleText>
+        </SubtitleContainer>
       </Screen>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
-  },
-});
-
 const RowInsertBtn = styled.View`
   flex-direction: row;
-  justify-content: space-around;
-  flex: 1;
-  margin-top: 10;
+  /* justify-content: space-around; */
+  flex: 0.4;
+  padding-top: 25;
+  margin-bottom: 10;
+  margin-left: 20;
+`;
+
+const HeadingContainer = styled.View`
+  margin-top: 70;
+  padding-left: 20;
+  padding-bottom: 15;
+  border-bottom-color: #d1d1d1;
+  border-bottom-width: 1;
+`;
+
+const HeadingText = styled.Text`
+  font-size: 40;
+  font-weight: bold;
+`;
+
+const SubtitleContainer = styled.View`
+  margin-top: 70;
+  padding-left: 20;
+  padding-bottom: 10;
+  border-bottom-color: #d1d1d1;
+  border-bottom-width: 1;
+`;
+
+const SubtitleText = styled.Text`
+  font-size: 15;
+  font-weight: bold;
+  color: #7d7d7d;
 `;

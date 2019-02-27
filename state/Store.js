@@ -5,7 +5,6 @@ class Store {
 
   @action scanCompleted(Number) {
     this.Barcode = Number
-    console.log(this.Barcode)
   }
 }
 

@@ -1,5 +1,6 @@
 # tsundoku-client
 
+https://www.badpenguin.org/learn-mobx-react-native-ten-minutes
 
 edit cycle
 node_modules/@shoutem/ui/index.js

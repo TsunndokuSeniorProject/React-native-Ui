@@ -16,7 +16,6 @@ class BarcodeScanner extends React.Component {
     this.state = {
       hasCameraPermission: null,
     }
-    console.log(this.props.navigation)
   }
 
   async componentDidMount() {

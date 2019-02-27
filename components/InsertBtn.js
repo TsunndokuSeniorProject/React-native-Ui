@@ -31,8 +31,8 @@ export default class InsertBtn extends React.Component {
 }
 
 const InsertView = styled.View`
-  width: 190;
-  height: 100;
+  width: 180;
+  height: 180;
   border: 1px solid #fff;
   padding-top: 10;
   padding-left: 10;
@@ -42,4 +42,5 @@ const InsertView = styled.View`
 const TextInsertBtn = styled.Text`
   color: white;
   font-size: 20;
+  font-weight: bold;
 `;

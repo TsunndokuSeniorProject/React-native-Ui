@@ -5,11 +5,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
+import styled from 'styled-components'
 
 import {
   Image,
@@ -24,10 +24,15 @@ import {
   Divider,
   Card,
   Caption,
+  View,
   Button,
   Icon,
   DropDownMenu,
 } from '@shoutem/ui';
+import AutoHeightImage from 'react-native-auto-height-image';
+
+const GetBooks = require('../request/GetAllBooks')
+const _ = require('lodash');
 
 export default class HomeScreen extends React.Component {
 
@@ -37,210 +42,108 @@ export default class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.renderRow = this.renderRow.bind(this);
     this.state = {
       filters: [
         { name: 'Filter', value: 'Filter' },
         { name: 'Sport', value: 'Sport' },
         { name: 'Food', value: 'Food' },
       ],
-      restaurants: [
-        {
-          "name": "Kyoto Amber Upper East",
-          "address": "225 Mulberry St, New York, NY 10012",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-        },
-        {
-          "name": "Gaspar Brasserie",
-          "address": "185 Sutter St, San Francisco, CA 94109",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-        },
-        {
-          "name": "Chalk Point Kitchen",
-          "address": "527 Broome St, New York, NY 10013",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-        },
-        {
-          "name": "Kyoto Amber Upper East",
-          "address": "225 Mulberry St, New York, NY 10012",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-        },
-        {
-          "name": "Gaspar Brasserie",
-          "address": "185 Sutter St, San Francisco, CA 94109",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-        },
-        {
-          "name": "Chalk Point Kitchen",
-          "address": "527 Broome St, New York, NY 10013",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-        },{
-          "name": "Kyoto Amber Upper East",
-          "address": "225 Mulberry St, New York, NY 10012",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-        },
-        {
-          "name": "Gaspar Brasserie",
-          "address": "185 Sutter St, San Francisco, CA 94109",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-        },
-        {
-          "name": "Chalk Point Kitchen",
-          "address": "527 Broome St, New York, NY 10013",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-        },{
-          "name": "Kyoto Amber Upper East",
-          "address": "225 Mulberry St, New York, NY 10012",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-        },
-        {
-          "name": "Gaspar Brasserie",
-          "address": "185 Sutter St, San Francisco, CA 94109",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-        },
-        {
-          "name": "Chalk Point Kitchen",
-          "address": "527 Broome St, New York, NY 10013",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-        },{
-          "name": "Kyoto Amber Upper East",
-          "address": "225 Mulberry St, New York, NY 10012",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-        },
-        {
-          "name": "Gaspar Brasserie",
-          "address": "185 Sutter St, San Francisco, CA 94109",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-        },
-        {
-          "name": "Chalk Point Kitchen",
-          "address": "527 Broome St, New York, NY 10013",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-        },{
-          "name": "Kyoto Amber Upper East",
-          "address": "225 Mulberry St, New York, NY 10012",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-        },
-        {
-          "name": "Gaspar Brasserie",
-          "address": "185 Sutter St, San Francisco, CA 94109",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-        },
-        {
-          "name": "Chalk Point Kitchen",
-          "address": "527 Broome St, New York, NY 10013",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-        },{
-          "name": "Kyoto Amber Upper East",
-          "address": "225 Mulberry St, New York, NY 10012",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-3.jpg" },
-        },
-        {
-          "name": "Gaspar Brasserie",
-          "address": "185 Sutter St, San Francisco, CA 94109",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" },
-        },
-        {
-          "name": "Chalk Point Kitchen",
-          "address": "527 Broome St, New York, NY 10013",
-          "image": { "url": "https://shoutem.github.io/static/getting-started/restaurant-2.jpg" },
-        },
-      ],
+      OddImageComponent: [],
+      EvenImageComponent: [],
     }
   }
 
-  renderRow(rowData, sectionId, index) {
-    // rowData contains grouped data for one row,
-    // so we need to remap it into cells and pass to GridRow
-    if (index === '0') {
-      return (
-        <TouchableOpacity key={index}>
-          <ImageBackground
-            styleName="large"
-            source={{ uri: rowData[0].image.url }}
-          >
-            <Tile>
-              <Title styleName="md-gutter-bottom">{rowData[0].name}</Title>
-              <Subtitle styleName="sm-gutter-horizontal">{rowData[0].address}</Subtitle>
-            </Tile>
-          </ImageBackground>
-          <Divider styleName="line" />
-        </TouchableOpacity>
-      );
+  async componentDidMount(){
+    const array_book_result = {
+      rightSide: [],
+      leftSide: [],
     }
-
-    const cellViews = rowData.map((restaurant, id) => {
-      console.log(restaurant.image.url)
-      return (
-        <TouchableOpacity key={id} styleName="flexible">
-          <Card styleName="flexible">
-            <Image
-              styleName="medium-wide"
-              source={{ uri: restaurant.image.url  }}
+    console.log("didMount")
+    const books = await GetBooks.GetBooks()
+    const { all_books_in_genre } = books
+    const book_length = all_books_in_genre.length
+    // console.log(all_books_in_genre)
+    console.log(typeof all_books_in_genre)
+    _.map(all_books_in_genre, (book, index) => {
+      if(index%2 == 0 && book){
+        console.log(_.get(book, 'Image', ''))
+        array_book_result.rightSide.push(
+          <BookCoverTouchable key={index}>
+            <AutoHeightImage
+              width={180}
+              source={{uri: _.get(book, 'Image', '')}}
             />
-            <View styleName="content">
-              <Subtitle numberOfLines={3}>{restaurant.name}</Subtitle>
-              <View styleName="horizontal">
-                <Caption styleName="collapsible" numberOfLines={2}>{restaurant.address}</Caption>
-              </View>
-            </View>
-          </Card>
-        </TouchableOpacity>
-      );
-    });
-
-    return (
-      <GridRow columns={2}>
-        {cellViews}
-      </GridRow>
-    );
+          </BookCoverTouchable>
+        )
+      } else if(index%2 != 0 && book){
+        console.log(_.get(book, 'Image', ''))
+        array_book_result.leftSide.push(
+          <BookCoverTouchable key={index}>
+            <AutoHeightImage
+              width={180}
+              source={{uri: _.get(book, 'Image', '')}}
+            />
+          </BookCoverTouchable>
+        )
+      }
+    })
+    this.setState({
+      OddImageComponent: array_book_result.rightSide,
+      EvenImageComponent: array_book_result.leftSide
+    })
   }
 
   render() {
-    const restaurants = this.state.restaurants;
-    // Group the restaurants into rows with 2 columns, except for the
-    // first restaurant. The first restaurant is treated as a featured restaurant
-    let isFirstArticle = true;
-    const groupedData = GridRow.groupByRows(restaurants, 2, () => {
-      if (isFirstArticle) {
-        isFirstArticle = false;
-        return 2;
-      }
-      return 1;
-    });
-
     return (
       <Screen>
-        <NavigationBar
-          styleName="inline"
-
-          leftComponent={
-            <Button>
-              <Icon name="sidebar" />
-            </Button>
-          }
-          centerComponent={
-            <Title>
-              {this.state.selectedFilter
-                ? this.state.selectedFilter.value
-                : this.state.filters[0].value}
-            </Title>
-          }
-          rightComponent={
-            <DropDownMenu
-              options={this.state.filters}
-              selectedOption={this.state.selectedFilter ? this.state.selectedFilter : this.state.filters[0]}
-              onOptionSelected={(filter) => this.setState({ selectedFilter: filter })}
-              titleProperty="name"
-              valueProperty="value"
-            />
-          }
-        />
-        <ListView
-          data={groupedData}
-          renderRow={this.renderRow}
-        />
+        <HeadingContainer>
+          <HeadingText>
+            Home
+          </HeadingText>
+        </HeadingContainer>
+        <ScrollView>
+          <HomeContainer>
+            <VerticalContainer>
+              {this.state.OddImageComponent}
+            </VerticalContainer>
+            <VerticalContainer>
+              {this.state.EvenImageComponent}
+            </VerticalContainer>
+          </HomeContainer>
+        </ScrollView>
       </Screen>
     );
   }
 }
+
+const HeadingContainer = styled.View`
+  margin-top: 70;
+  padding-left: 20;
+  padding-bottom: 15;
+  border-bottom-color: #d1d1d1;
+  border-bottom-width: 1;
+`;
+
+const HeadingText = styled.Text`
+  font-size: 40;
+  font-weight: bold;
+`;
+
+const HomeContainer = styled.View`
+  flex: 1;
+  flex-direction: row;
+  padding-top: 20;
+  padding-right: 5;
+  padding-left: 5;
+`;
+
+const VerticalContainer = styled.View`
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const BookCoverTouchable = styled.TouchableOpacity`
+  padding-bottom: 15;
+`;
